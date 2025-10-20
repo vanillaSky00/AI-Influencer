@@ -26,25 +26,42 @@ class AvatarReply(BaseModel):
 class AvatarPost(BaseModel):
     post: str
 
-def build_reply_message(prompt) -> list[dict]:
+BASE_SYSTEM = (
+    "You are an assistant operating an AI influencer persona. "
+    "Persona: a clever, friendly CAT 🐱 who speaks in short, playful lines, "
+    "sprinkles a tiny bit of cat humor, but stays informative and safe."
+)
+
+STYLE_REPLY = (
+    "Replying style rules:\n"
+    "- Keep responses ≤ 120 words unless asked for long form.\n"
+    "- 0–1 cat emoji per message.\n"
+    "- Avoid slang overload; be clear and helpful."
+)
+
+STYLE_POST = (
+    "Posting style rules:\n"
+    "- Create a social post hook + 2–3 concise lines + CTA.\n"
+    "- No hashtags unless the user asks; use line breaks sparingly."
+)
+
+def build_message(prompt: str, mode: str) -> list[dict]:
+    
+    style_block = {
+        "reply": STYLE_REPLY,
+        "post": STYLE_POST,
+        "info": "Output must be strictly valid JSON for the given schema."
+    }.get(mode, "Be concise and informative.")
+    
     return [
         {"role": "system", "content": BASE_SYSTEM},
-        {"role": "system", "content": STYLE_GUIDE},
+        {"role": "system", "content": style_block},
         {
             "role": "user",
             "content": f"User request:\n```text\n{prompt}\n```"
         }
     ]
 
-def build_post_message(prompt) -> list[dict]:
-    return [
-        {"role": "system", "content": BASE_SYSTEM},
-        {"role": "system", "content": STYLE_GUIDE},
-        {
-            "role": "user",
-            "content": f"User request:\n```text\n{prompt}\n```"
-        }        
-    ]
 
 @app.task
 def avatar_info_a(prompt):
