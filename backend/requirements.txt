@@ -24,11 +24,12 @@ httpx                       # async HTTP client (LLM APIs, webhooks)
 tenacity                    # retry utilities for API calls
 python-dateutil             # datetime helpers
 
-# --- LLM ---
-openai
-langchain
-faiss-cpu
-numpy
-dateparser
+# --- LLM / AI ---
+openai                       # official OpenAI SDK
+langchain                    # for advanced LLM orchestration
+faiss-cpu                    # vector search (CPU version)
+numpy                        # numerical utilities
+dateparser                   # natural-language date parsing
 
-APScheduler
+# --- Scheduling ---
+APScheduler                  # job scheduler for periodic tasks

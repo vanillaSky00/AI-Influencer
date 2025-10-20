@@ -3,8 +3,8 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     environment:
-      RABBIT_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBIT_DEFAULT_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     ports:
@@ -29,8 +29,8 @@ services:
       start_period: 30s
 
   celery_worker:
-    build:
-    command: celery -A worker worker --loglevel=info
+    build: .
+    command: celery -A services.worker:app worker --loglevel=info
     env_file: .env
     depends_on:
       rabbitmq:
@@ -38,17 +38,19 @@ services:
       redis:
         condition: service_healthy
   
-  client:
-    build:
-    command: python client.py
+  web:
+    build: .
     env_file: .env
+    command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
     depends_on:
       rabbitmq:
         condition: service_healthy
       redis:
         condition: service_healthy
       celery_worker:
-        condition: service_start
+        condition: service_started
 
 volumes:
   rabbitmq_data:
