@@ -86,7 +86,7 @@ def avatar_info_a(prompt):
     
     response = client.beta.chat.completions.parse(
         model = 'gpt-4o-mini',
-        messages = build_message(prompt),
+        messages = build_message(prompt, "info"),
         response_format = AvatarInfoA,
     )
     
@@ -98,23 +98,23 @@ def avatar_info_a(prompt):
 def avatar_info_b(prompt):
     response = client.beta.chat.completions.parse(
         model = 'gpt-4o-mini',
-        messages = build_message(prompt),
+        messages = build_message(prompt, "info"),
         response_format = AvatarInfoB,
     )
     
-    avatar_b = AvatarInfoB.model_validate_json(response)
+    avatar_b = AvatarInfoB.model_validate_json(response.choices[0].message.content)
     
-    return avatar_b.model_dump();
+    return avatar_b.model_dump()
 
 @app.task
 def avatar_reply(prompt):
     response = client.beta.chat.completions.parse(
         model = 'gpt-4o-mini',
-        messages = build_message(prompt),
+        messages = build_message(prompt, "reply"),
         response_format = AvatarReply,
     )
     
-    avatar_r = AvatarReply.model_validate_json(response);
+    avatar_r = AvatarReply.model_validate_json(response.choices[0].message.content)
     
     return avatar_r.model_dump() 
 
@@ -122,11 +122,11 @@ def avatar_reply(prompt):
 def avatar_post(prompt):
     response = client.beta.chat.completions.parse(
         model = 'gpt-4o-mini',
-        messages = build_message(prompt),
+        messages = build_message(prompt, "post"),
         response_format = AvatarPost,
     )
     
-    avatar_p = AvatarPost.model_validate_json(response);
+    avatar_p = AvatarPost.model_validate_json(response.choices[0].message.content)
     
     return avatar_p.model_dump() 
 
