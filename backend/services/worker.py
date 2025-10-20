@@ -4,14 +4,23 @@ from celery import Celery
 from openai import OpenAI
 from pydantic import BaseModel
 
+# -------------------------
+# Celery & OpenAPI client
+# -------------------------
 app = Celery(
     'influencer_info',
     broker = os.getenv('CELERY_BROKER_URL'),
     backend = os.getenv('CELERY_BACKEND_URL')
 )
 
+app.conf.timezone = os.getenv("TIMEZONE", "Asia/Taipei")
+app.conf.enable_utc = False
+
 client = OpenAI(api_key = os.getenv('OPENAI_API_KEY'))
 
+# -------------------------
+# Pydantic schemas
+# -------------------------
 class AvatarInfoA(BaseModel):
     name: str
     age: str
@@ -26,6 +35,10 @@ class AvatarReply(BaseModel):
 class AvatarPost(BaseModel):
     post: str
 
+
+# -------------------------
+# Framework prompts
+# -------------------------
 BASE_SYSTEM = (
     "You are an assistant operating an AI influencer persona. "
     "Persona: a clever, friendly CAT 🐱 who speaks in short, playful lines, "
@@ -62,7 +75,12 @@ def build_message(prompt: str, mode: str) -> list[dict]:
         }
     ]
 
+# TODO: maybe need a generic wrapper for openai handling
 
+
+# -------------------------
+# Celery tasks
+# -------------------------
 @app.task
 def avatar_info_a(prompt):
     
