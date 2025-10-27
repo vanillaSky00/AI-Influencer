@@ -1,5 +1,5 @@
 networks:
-  appent: {}
+  appnet: {}
 
 services:
 
@@ -65,7 +65,7 @@ services:
     image: chat-gui:latest
     container_name: chat-gui-mac
     environment:
-      - API_BASE=http://web:8000          # will resolve via appnet DNS
+      - API_BASE=http://web:8000/api          # will resolve via appnet DNS
       - DISPLAY=host.docker.internal:0    # keep for mac/XQuartz
     depends_on:
       web: { condition: service_started }

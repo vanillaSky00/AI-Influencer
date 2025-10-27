@@ -49,3 +49,7 @@ docker compose --profile mac up --build
 
 # couldn't connect to display "host.docker.internal:0" check:
 # https://github.com/orgs/orbstack/discussions/1388
+
+
+# rebuild and restart only gui 
+#docker compose --profile mac up --build chat-mac
