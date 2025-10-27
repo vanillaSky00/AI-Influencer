@@ -1,0 +1,4 @@
+# Tkinter is installed via apt (python3-tk), so no pip packages required.
+# If you later want to package a single executable, uncomment:
+# pyinstaller==6.*
+requests

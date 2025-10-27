@@ -24,8 +24,7 @@ def create_reply(body: PromptIn):
     task = avatar_post.delay(body.prompt)
     return {"task_id": task.id, "status": "queued"}
 
-
-@router.post("/tasks/{task_id}")
+@router.get("/tasks/{task_id}")
 def get_task_status(task_id: str):
     
     result = AsyncResult(task_id, app=celery_app)

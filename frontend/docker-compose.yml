@@ -1,0 +1,23 @@
+services:
+  chat-linux:
+    profiles: ["linux"]
+    build: .
+    image: chat-gui:latest
+    container_name: chat-gui-linux
+    environment:
+      - DISPLAY=${DISPLAY}           # inherit your Linux DISPLAY
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro  # share X11 socket
+      # Optional: enable MIT-MAGIC-COOKIE auth if you use it
+      # - ${XAUTHORITY:-$HOME/.Xauthority}:/home/appuser/.Xauthority:ro
+    network_mode: bridge
+
+  chat-mac:
+    profiles: ["mac"]
+    build: .
+    image: chat-gui:latest
+    container_name: chat-gui-mac
+    environment:
+      - API_BASE=http://web:8000
+      - DISPLAY=host.docker.internal:0
+    network_mode: bridge
