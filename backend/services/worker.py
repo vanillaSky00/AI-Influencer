@@ -1,12 +1,10 @@
 import os
-
+from prompts import framework_prompts
 from celery import Celery
 from openai import OpenAI
 from pydantic import BaseModel
 
-# -------------------------
 # Celery & OpenAPI client
-# -------------------------
 app = Celery(
     'influencer_info',
     broker = os.getenv('CELERY_BROKER_URL'),
@@ -18,9 +16,8 @@ app.conf.enable_utc = False
 
 client = OpenAI(api_key = os.getenv('OPENAI_API_KEY'))
 
-# -------------------------
+
 # Pydantic schemas
-# -------------------------
 class AvatarInfoA(BaseModel):
     name: str
     age: str
@@ -36,27 +33,11 @@ class AvatarPost(BaseModel):
     post: str
 
 
-# -------------------------
 # Framework prompts
-# -------------------------
-BASE_SYSTEM = (
-    "You are an assistant operating an AI influencer persona. "
-    "Persona: a clever, friendly CAT 🐱 who speaks in short, playful lines, "
-    "sprinkles a tiny bit of cat humor, but stays informative and safe."
-)
+BASE_SYSTEM = framework_prompts.BASE_SYSTEM
+STYLE_REPLY = framework_prompts.STYLE_REPLY
+STYLE_POST = framework_prompts.STYLE_POST
 
-STYLE_REPLY = (
-    "Replying style rules:\n"
-    "- Keep responses ≤ 120 words unless asked for long form.\n"
-    "- 0–1 cat emoji per message.\n"
-    "- Avoid slang overload; be clear and helpful."
-)
-
-STYLE_POST = (
-    "Posting style rules:\n"
-    "- Create a social post hook + 2–3 concise lines + CTA.\n"
-    "- No hashtags unless the user asks; use line breaks sparingly."
-)
 
 def build_message(prompt: str, mode: str) -> list[dict]:
     
@@ -78,9 +59,7 @@ def build_message(prompt: str, mode: str) -> list[dict]:
 # TODO: maybe need a generic wrapper for openai handling
 
 
-# -------------------------
 # Celery tasks
-# -------------------------
 @app.task
 def avatar_info_a(prompt):
     
