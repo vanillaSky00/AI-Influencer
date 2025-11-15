@@ -1,6 +1,11 @@
 # Vanilla Meow — AI Cat Avatar 🐱
-A small but complete demo of an AI-driven “cat influencer” that chats and posts, powered by OpenAI, FastAPI, Celery, and a lightweight GUI built for macOS.
+
 <br>
+<p align="center">
+  <img src="assets/screenshots/gui-mac.png" width="650">
+</p>
+
+A small but complete demo of an AI-driven “cat influencer” that chats and posts, powered by OpenAI, FastAPI, Celery, and a lightweight GUI built for macOS.
 
 <p align="center">
   <img src="https://img.shields.io/badge/FastAPI-109989?style=for-the-badge&logo=fastapi&logoColor=white" />
@@ -17,6 +22,7 @@ A small but complete demo of an AI-driven “cat influencer” that chats and po
   <img src="https://img.shields.io/badge/XQuartz-FF6600?style=for-the-badge&logo=x.org&logoColor=white" />
   <img src="https://img.shields.io/badge/socat-50A14F?style=for-the-badge" />
 </p>
+
 
 
 
